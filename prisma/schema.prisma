@@ -18,7 +18,7 @@ model Usuario {
   senha        String
   departamento String
   curso        String
-  foto_perfil  Bytes
+  foto_perfil  Bytes?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
