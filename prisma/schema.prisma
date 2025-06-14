@@ -28,7 +28,6 @@ model Usuario {
 model Professor{
   id           Int                   @id @default(autoincrement())
   nome         String
-  disciplinaID Int
   disciplinas  ProfessorDisciplina[]
   avaliacoes   Avaliacao[]
   departamento String
