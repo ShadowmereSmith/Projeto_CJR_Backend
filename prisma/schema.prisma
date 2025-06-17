@@ -50,7 +50,7 @@ model ProfessorDisciplina {
   professorID  Int
   disciplinaID Int
   professor    Professor  @relation(fields:[professorID], references:[id], onDelete: Cascade)
-  disciplina   Disciplina @relation(fields: [disciplinaID], references: [id])
+  disciplina   Disciplina @relation(fields: [disciplinaID], references: [id], onDelete: Cascade)
   @@id([professorID, disciplinaID])
 
 }
