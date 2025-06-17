@@ -28,7 +28,6 @@ model Usuario {
 model Professor{
   id           Int                   @id @default(autoincrement())
   nome         String
-  disciplinaID Int
   disciplinas  ProfessorDisciplina[]
   avaliacoes   Avaliacao[]
   departamento String
@@ -50,7 +49,7 @@ model Disciplina{
 model ProfessorDisciplina {
   professorID  Int
   disciplinaID Int
-  professor    Professor  @relation(fields:[professorID], references:[id])
+  professor    Professor  @relation(fields:[professorID], references:[id], onDelete: Cascade)
   disciplina   Disciplina @relation(fields: [disciplinaID], references: [id])
   @@id([professorID, disciplinaID])
 
@@ -64,8 +63,8 @@ model Avaliacao{
   conteudo     String
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  usuario      Usuario       @relation(fields: [usuarioID], references: [id])
-  professor    Professor     @relation(fields: [professorID], references: [id])
+  usuario      Usuario       @relation(fields: [usuarioID], references: [id], onDelete: Cascade)
+  professor    Professor     @relation(fields: [professorID], references: [id], onDelete: Cascade)
   disciplina   Disciplina    @relation(fields: [disciplinaID], references: [id])
   comentarios  Comentario[]
 }
@@ -77,6 +76,6 @@ model Comentario{
   conteudo    String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  usuario     Usuario   @relation(fields: [usuarioID], references: [id])
-  avaliacao   Avaliacao @relation(fields: [avaliacaoID], references: [id])
+  usuario     Usuario   @relation(fields: [usuarioID], references: [id], onDelete: Cascade)
+  avaliacao   Avaliacao @relation(fields: [avaliacaoID], references: [id], onDelete: Cascade)
 }
