@@ -65,7 +65,7 @@ model Avaliacao{
   updatedAt    DateTime      @updatedAt
   usuario      Usuario       @relation(fields: [usuarioID], references: [id], onDelete: Cascade)
   professor    Professor     @relation(fields: [professorID], references: [id], onDelete: Cascade)
-  disciplina   Disciplina    @relation(fields: [disciplinaID], references: [id])
+  disciplina   Disciplina    @relation(fields: [disciplinaID], references: [id], onDelete: Cascade)
   comentarios  Comentario[]
 }
 
