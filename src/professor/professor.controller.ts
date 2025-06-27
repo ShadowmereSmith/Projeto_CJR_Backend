@@ -1,13 +1,14 @@
 import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { ProfessorService } from './professor.service';
-import { Prisma } from '../../generated/prisma';
+import { CreateProfessorDto } from './dto/create-professor.dto';
+import { UpdateProfessorDto } from './dto/update-professor.dto';
 
 @Controller('professores')
 export class ProfessorController {
   constructor(private readonly professorService: ProfessorService) {}
 
   @Post()
-  create(@Body() data: Prisma.ProfessorCreateInput) {
+  create(@Body() data: CreateProfessorDto) {
     return this.professorService.create(data);
   }
 
@@ -22,7 +23,7 @@ export class ProfessorController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: Prisma.ProfessorUpdateInput) {
+  update(@Param('id') id: string, @Body() data: UpdateProfessorDto) {
     return this.professorService.update(+id, data);
   }
 

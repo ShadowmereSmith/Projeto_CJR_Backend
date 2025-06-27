@@ -1,13 +1,14 @@
 import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { DisciplinaService } from './disciplina.service';
-import { Prisma } from '../../generated/prisma';
+import { CreateDisciplinaDto } from './dto/create-disciplina.dto';
+import { UpdateDisciplinaDto } from './dto/update-disciplina.dto';
 
 @Controller('disciplinas')
 export class DisciplinaController {
   constructor(private readonly disciplinaService: DisciplinaService) {}
 
   @Post()
-  create(@Body() data: Prisma.DisciplinaCreateInput) {
+  create(@Body() data: CreateDisciplinaDto) {
     return this.disciplinaService.create(data);
   }
 
@@ -22,7 +23,7 @@ export class DisciplinaController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: Prisma.DisciplinaUpdateInput) {
+  update(@Param('id') id: string, @Body() data: UpdateDisciplinaDto) {
     return this.disciplinaService.update(+id, data);
   }
 

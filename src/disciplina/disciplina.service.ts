@@ -1,11 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma, PrismaClient } from '../../generated/prisma';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaClient } from '../../generated/prisma';
+import { CreateDisciplinaDto } from './dto/create-disciplina.dto';
+import { UpdateDisciplinaDto } from './dto/update-disciplina.dto';
 
 @Injectable()
 export class DisciplinaService {
   private prisma = new PrismaClient();
 
-  async create(data: Prisma.DisciplinaCreateInput) {
+  async create(data: CreateDisciplinaDto) {
     return this.prisma.disciplina.create({ data });
   }
 
@@ -14,10 +16,24 @@ export class DisciplinaService {
   }
 
   async findOne(id: number) {
-    return this.prisma.disciplina.findUnique({ where: { id } });
+
+    //Verificando se a disciplina existe
+    const disciplina = await this.prisma.comentario.findUnique({ where: { id } });
+    if (!disciplina) {
+      throw new NotFoundException('Disciplina não encontrada.');
+    }
+    
+    return disciplina;
   }
 
-  async update(id: number, data: Prisma.DisciplinaUpdateInput) {
+  async update(id: number, data: UpdateDisciplinaDto) {
+
+    //Verificando se a disciplina existe
+    const disciplina = await this.prisma.comentario.findUnique({ where: { id } });
+    if (!disciplina) {
+      throw new NotFoundException('Disciplina não encontrada.');
+    }
+
     return this.prisma.disciplina.update({
       where: { id },
       data,
@@ -25,6 +41,13 @@ export class DisciplinaService {
   }
 
   async remove(id: number) {
+
+    //Verificando se a disciplina existe
+    const disciplina = await this.prisma.comentario.findUnique({ where: { id } });
+    if (!disciplina) {
+      throw new NotFoundException('Disciplina não encontrada.');
+    }
+
     return this.prisma.disciplina.delete({ where: { id } });
   }
 }
