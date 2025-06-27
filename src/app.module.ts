@@ -6,9 +6,17 @@ import { ProfessorModule } from './professor/professor.module';
 import { ComentarioModule } from './comentario/comentario.module'; 
 import { AvaliacaoModule } from './avaliacao/avaliacao.module';
 import { DisciplinaModule } from './disciplina/disciplina.module';
+import { AuthModule } from './auth/auth.module'; // 👈 importa o AuthModule
 
 @Module({
-  imports: [UsuarioModule, ProfessorModule, ComentarioModule, AvaliacaoModule, DisciplinaModule],
+  imports: [
+    UsuarioModule,
+    ProfessorModule,
+    ComentarioModule,
+    AvaliacaoModule,
+    DisciplinaModule,
+    AuthModule, // 👈 adiciona aqui também
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

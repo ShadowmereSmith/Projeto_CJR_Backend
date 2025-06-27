@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { PrismaClient } from '../../generated/prisma';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsuarioService {
@@ -16,7 +17,14 @@ export class UsuarioService {
     throw new BadRequestException('Já existe um usuário com este email.');
   }
 
-    return this.prisma.usuario.create({ data });
+    const senhaCriptografada = bcrypt.hashSync(data.senha, 10);
+
+    return this.prisma.usuario.create({
+      data: {
+        ...data,
+        senha: senhaCriptografada,
+      },
+    });
   }
 
   async findAll() {
