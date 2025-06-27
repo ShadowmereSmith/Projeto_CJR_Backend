@@ -1,13 +1,14 @@
 import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { ComentarioService } from './comentario.service';
-import { Prisma } from '../../generated/prisma';
+import { CreateComentarioDto } from './dto/create-comentario.dto';
+import { UpdateComentarioDto } from './dto/update-comentario.dto';
 
 @Controller('comentarios')
 export class ComentarioController {
   constructor(private readonly comentarioService: ComentarioService) {}
 
   @Post()
-  create(@Body() data: Prisma.ComentarioCreateInput) {
+  create(@Body() data: CreateComentarioDto) {
     return this.comentarioService.create(data);
   }
 
@@ -22,7 +23,7 @@ export class ComentarioController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() data: Prisma.ComentarioUpdateInput) {
+  update(@Param('id') id: string, @Body() data: UpdateComentarioDto) {
     return this.comentarioService.update(+id, data);
   }
 
