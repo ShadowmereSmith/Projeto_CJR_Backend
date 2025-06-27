@@ -1,11 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma, PrismaClient } from '../../generated/prisma';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaClient } from '../../generated/prisma';
+import { CreateProfessorDto } from './dto/create-professor.dto';
+import { UpdateProfessorDto } from './dto/update-professor.dto';
 
 @Injectable()
 export class ProfessorService {
   private prisma = new PrismaClient();
 
-  async create(data: Prisma.ProfessorCreateInput) {
+  async create(data: CreateProfessorDto) {
     return this.prisma.professor.create({ data });
   }
 
@@ -14,10 +16,24 @@ export class ProfessorService {
   }
 
   async findOne(id: number) {
-    return this.prisma.professor.findUnique({ where: { id } });
+
+    //Verificando se o professor existe
+    const professor = await this.prisma.professor.findUnique({ where: { id } });
+    if (!professor) {
+      throw new NotFoundException('Professor não encontrado.');
+    }
+
+    return professor;
   }
 
-  async update(id: number, data: Prisma.ProfessorUpdateInput) {
+  async update(id: number, data: UpdateProfessorDto) {
+
+    //Verificando se o professor existe
+    const professor = await this.prisma.professor.findUnique({ where: { id } });
+    if (!professor) {
+      throw new NotFoundException('Professor não encontrado.');
+    }
+
     return this.prisma.professor.update({
       where: { id },
       data,
@@ -25,6 +41,13 @@ export class ProfessorService {
   }
 
   async remove(id: number) {
+
+    //Verificando se o professor existe
+    const professor = await this.prisma.professor.findUnique({ where: { id } });
+    if (!professor) {
+      throw new NotFoundException('Professor não encontrado.');
+    }
+
     return this.prisma.professor.delete({ where: { id } });
   }
 }

@@ -1,11 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { Prisma, PrismaClient } from '../../generated/prisma';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaClient } from '../../generated/prisma';
+import { CreateAvaliacaoDto } from './dto/create-avaliacao.dto';
+import { UpdateAvaliacaoDto } from './dto/update-avaliacao.dto';
 
 @Injectable()
 export class AvaliacaoService {
   private prisma = new PrismaClient();
 
-  async create(data: Prisma.AvaliacaoCreateInput) {
+  async create(data: CreateAvaliacaoDto) {
     return this.prisma.avaliacao.create({ data });
   }
 
@@ -14,10 +16,23 @@ export class AvaliacaoService {
   }
 
   async findOne(id: number) {
-    return this.prisma.avaliacao.findUnique({ where: { id } });
+    //Verificando se a avaliacao existe
+    const avaliacao = await this.prisma.comentario.findUnique({ where: { id } });
+    if (!avaliacao) {
+      throw new NotFoundException('Avaliação não encontrada.');
+    }
+    
+    return avaliacao;
   }
 
-  async update(id: number, data: Prisma.AvaliacaoUpdateInput) {
+  async update(id: number, data: UpdateAvaliacaoDto) {
+
+    //Verificando se a avaliacao existe
+    const avaliacao = await this.prisma.comentario.findUnique({ where: { id } });
+    if (!avaliacao) {
+      throw new NotFoundException('Avaliação não encontrada.');
+    }
+
     return this.prisma.avaliacao.update({
       where: { id },
       data,
@@ -25,6 +40,13 @@ export class AvaliacaoService {
   }
 
   async remove(id: number) {
+
+    //Verificando se a avaliacao existe
+    const avaliacao = await this.prisma.comentario.findUnique({ where: { id } });
+    if (!avaliacao) {
+      throw new NotFoundException('Avaliação não encontrada.');
+    }
+
     return this.prisma.avaliacao.delete({ where: { id } });
   }
 }
