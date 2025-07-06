@@ -3,7 +3,7 @@ import { ProfessorDisciplinaService } from './professor-disciplina.service';
 import { CreateProfessorDisciplinaDto } from './dto/create-professor-disciplina.dto';
 import { UpdateProfessorDisciplinaDto } from './dto/update-professor-disciplina.dto';
 
-@Controller('professores')
+@Controller('professores-disciplinas')
 export class ProfessorDisciplinaController {
   constructor(private readonly professorDisciplinaService: ProfessorDisciplinaService) {}
 
