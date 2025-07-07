@@ -18,7 +18,9 @@ export class DisciplinaService {
   async findOne(id: number) {
 
     //Verificando se a disciplina existe
-    const disciplina = await this.prisma.comentario.findUnique({ where: { id } });
+    const disciplina = await this.prisma.comentario.findUnique({
+      where: { id },
+      });
     if (!disciplina) {
       throw new NotFoundException('Disciplina não encontrada.');
     }

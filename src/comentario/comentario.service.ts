@@ -17,7 +17,13 @@ export class ComentarioService {
 
   async findOne(id: number) {
     //Verificando se o comentario existe
-    const comentario = await this.prisma.comentario.findUnique({ where: { id } });
+    const comentario = await this.prisma.comentario.findUnique({ 
+      where: { id },
+      include: {
+        usuario: true,
+        avaliacao: true,
+      }
+    });
     if (!comentario) {
       throw new NotFoundException('Comentário não encontrado.');
     }
