@@ -60,6 +60,29 @@ export class UsuarioService {
       }
     }
 
+    // Checar se quer trocar senha
+    if (data.senhaAtual || data.novaSenha) {
+      if (!data.senhaAtual || !data.novaSenha) {
+        throw new BadRequestException('Para trocar a senha, envie senhaAtual e novaSenha.');
+      }
+
+      // Validar senha atual
+      const senhaCorreta = await bcrypt.compare(data.senhaAtual, usuario.senha);
+      if (!senhaCorreta) {
+        throw new BadRequestException('Senha atual incorreta.');
+      }
+
+      // Gerar novo hash
+      const novoHash = await bcrypt.hash(data.novaSenha, 10);
+
+      // Atualizar o hash no objeto de update
+      data.senha = novoHash;
+
+      // Remover campos não salvos na tabela
+      delete data.senhaAtual;
+      delete data.novaSenha;
+    }
+
     return this.prisma.usuario.update({
       where: { id },
       data,
