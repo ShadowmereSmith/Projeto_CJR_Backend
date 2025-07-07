@@ -22,7 +22,7 @@ export class AuthService {
     return { token };
   }
 
-  async register(email: string, senha: string) {
+  async register(email: string, senha: string, nome: string, curso: string, departamento: string) {
     const existe = await this.prisma.usuario.findUnique({ where: { email } });
 
     if (existe) {
@@ -35,9 +35,9 @@ export class AuthService {
       data: {
         email,
         senha: senhaHash,
-        nome: 'Novo Usuário',
-        curso: 'Não informado',
-        departamento: 'Não informado',
+        nome: nome,
+        curso: curso,
+        departamento: departamento,
       },
     });
 
