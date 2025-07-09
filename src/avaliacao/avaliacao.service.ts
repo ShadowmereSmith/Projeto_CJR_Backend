@@ -40,7 +40,7 @@ export class AvaliacaoService {
 
   async findOne(id: number) {
     //Verificando se a avaliacao existe
-    const avaliacao = await this.prisma.comentario.findUnique({ 
+    const avaliacao = await this.prisma.avaliacao.findUnique({ 
       where: { id }
     });
     if (!avaliacao) {
