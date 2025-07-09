@@ -12,7 +12,18 @@ export class ProfessorService {
   }
 
   async findAll() {
-    return this.prisma.professor.findMany();
+    const professores = await this.prisma.professor.findMany({
+      include: {
+        disciplinas: {
+          include: {
+            disciplina: true,
+          }
+        },
+        avaliacoes: true, 
+      },
+    });
+
+    return professores;
   }
 
   async findOne(id: number) {
