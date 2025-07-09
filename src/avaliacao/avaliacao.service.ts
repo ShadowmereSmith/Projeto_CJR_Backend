@@ -53,7 +53,7 @@ export class AvaliacaoService {
   async update(id: number, data: UpdateAvaliacaoDto) {
 
     //Verificando se a avaliacao existe
-    const avaliacao = await this.prisma.comentario.findUnique({ where: { id } });
+    const avaliacao = await this.prisma.avaliacao.findUnique({ where: { id } });
     if (!avaliacao) {
       throw new NotFoundException('Avaliação não encontrada.');
     }
@@ -67,7 +67,7 @@ export class AvaliacaoService {
   async remove(id: number) {
 
     //Verificando se a avaliacao existe
-    const avaliacao = await this.prisma.comentario.findUnique({ where: { id } });
+    const avaliacao = await this.prisma.avaliacao.findUnique({ where: { id } });
     if (!avaliacao) {
       throw new NotFoundException('Avaliação não encontrada.');
     }
