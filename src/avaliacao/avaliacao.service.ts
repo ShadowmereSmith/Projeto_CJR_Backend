@@ -8,12 +8,35 @@ export class AvaliacaoService {
   private prisma = new PrismaClient();
 
   async create(data: CreateAvaliacaoDto) {
-    return this.prisma.avaliacao.create({ data });
+    return this.prisma.avaliacao.create({
+      data: {
+        conteudo: data.conteudo,
+        usuario: { connect: { id: data.usuarioID } },
+        professor: { connect: { id: data.professorID } },
+        disciplina: { connect: { id: data.disciplinaID } },
+      },
+      include: {
+        usuario: true,
+        professor: true,
+        disciplina: true,
+        comentarios: true,
+      },
+    });
   }
 
+
+
   async findAll() {
-    return this.prisma.avaliacao.findMany();
+    return this.prisma.avaliacao.findMany({
+      include: {
+        usuario: true,
+        professor: true,
+        disciplina: true,
+        comentarios: true,
+      },
+    });
   }
+
 
   async findOne(id: number) {
     //Verificando se a avaliacao existe

@@ -27,21 +27,32 @@ export class ProfessorService {
   }
 
   async findOne(id: number) {
+  const professor = await this.prisma.professor.findUnique({
+    where: { id },
+    include: {
+      disciplinas: {
+        include: {
+          disciplina: true,
+        }
+      },
+      avaliacoes: {
+        include: {
+          usuario: true,
+          professor: true,
+          disciplina: true,
+          comentarios: true,
+        },
+      },
+    },
+  });
 
-    //Verificando se o professor existe
-    const professor = await this.prisma.professor.findUnique({ 
-      where: { id },
-      include: {
-        avaliacoes: true,
-        disciplinas: true,
-      }
-    });
-    if (!professor) {
-      throw new NotFoundException('Professor não encontrado.');
-    }
-
-    return professor;
+  if (!professor) {
+    throw new NotFoundException('Professor não encontrado.');
   }
+
+  return professor;
+}
+
 
   async update(id: number, data: UpdateProfessorDto) {
 
