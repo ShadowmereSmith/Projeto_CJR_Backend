@@ -41,7 +41,16 @@ export class AvaliacaoService {
   async findOne(id: number) {
     //Verificando se a avaliacao existe
     const avaliacao = await this.prisma.avaliacao.findUnique({ 
-      where: { id }
+      where: { id },
+      include: {
+        usuario: true,
+        professor: true,
+        disciplina: true,
+        comentarios: {include: {
+          usuario: true
+        },
+        }
+      },
     });
     if (!avaliacao) {
       throw new NotFoundException('Avaliação não encontrada.');
