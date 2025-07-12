@@ -6,6 +6,7 @@ import { ProfessorModule } from './professor/professor.module';
 import { ComentarioModule } from './comentario/comentario.module'; 
 import { AvaliacaoModule } from './avaliacao/avaliacao.module';
 import { DisciplinaModule } from './disciplina/disciplina.module';
+import { ProfessorDisciplinaModule } from './professor-disciplina/professor-disciplina.module';
 import { AuthModule } from './auth/auth.module'; // 👈 importa o AuthModule
 
 @Module({
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module'; // 👈 importa o AuthModule
     ComentarioModule,
     AvaliacaoModule,
     DisciplinaModule,
+    ProfessorDisciplinaModule,
     AuthModule, // 👈 adiciona aqui também
   ],
   controllers: [AppController],

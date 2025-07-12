@@ -1,7 +1,19 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { 
+  Controller, 
+  Get, 
+  Post, 
+  Body, 
+  Param, 
+  Delete, 
+  Put, 
+  UseGuards, 
+  Req, 
+  ForbiddenException 
+} from '@nestjs/common';
 import { ComentarioService } from './comentario.service';
 import { CreateComentarioDto } from './dto/create-comentario.dto';
 import { UpdateComentarioDto } from './dto/update-comentario.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('comentarios')
 export class ComentarioController {
@@ -27,8 +39,16 @@ export class ComentarioController {
     return this.comentarioService.update(+id, data);
   }
 
+  // PROTEGE O DELETE: só o dono do comentário pode excluir
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string, @Req() req) {
+    const userId = req.user.userId || req.user.sub; // depende do seu payload
+    const comentario = await this.comentarioService.findOne(+id);
+
+    if (!comentario) throw new ForbiddenException('Comentário não encontrado.');
+    if (comentario.usuarioID !== userId) throw new ForbiddenException('Você só pode excluir seus próprios comentários.');
+
     return this.comentarioService.remove(+id);
   }
 }

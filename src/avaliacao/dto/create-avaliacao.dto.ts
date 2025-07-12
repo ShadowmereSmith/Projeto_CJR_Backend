@@ -7,7 +7,7 @@ import {
 export class CreateAvaliacaoDto {
 
   @IsNotEmpty({ message: 'usuarioID é obrigatório' })
-  @IsInt({ message: 'usuarioID precisa ser um número inteiro' })
+  @IsInt({ message: 'usuarioID preciasa ser um número inteiro' })
   usuarioID: number;
 
   @IsNotEmpty({ message: 'professorID é obrigatório' })

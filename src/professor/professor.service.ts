@@ -12,19 +12,47 @@ export class ProfessorService {
   }
 
   async findAll() {
-    return this.prisma.professor.findMany();
+    const professores = await this.prisma.professor.findMany({
+      include: {
+        disciplinas: {
+          include: {
+            disciplina: true,
+          }
+        },
+        avaliacoes: true, 
+      },
+    });
+
+    return professores;
   }
 
   async findOne(id: number) {
+  const professor = await this.prisma.professor.findUnique({
+    where: { id },
+    include: {
+      disciplinas: {
+        include: {
+          disciplina: true,
+        }
+      },
+      avaliacoes: {
+        include: {
+          usuario: true,
+          professor: true,
+          disciplina: true,
+          comentarios: true,
+        },
+      },
+    },
+  });
 
-    //Verificando se o professor existe
-    const professor = await this.prisma.professor.findUnique({ where: { id } });
-    if (!professor) {
-      throw new NotFoundException('Professor não encontrado.');
-    }
-
-    return professor;
+  if (!professor) {
+    throw new NotFoundException('Professor não encontrado.');
   }
+
+  return professor;
+}
+
 
   async update(id: number, data: UpdateProfessorDto) {
 

@@ -8,16 +8,50 @@ export class AvaliacaoService {
   private prisma = new PrismaClient();
 
   async create(data: CreateAvaliacaoDto) {
-    return this.prisma.avaliacao.create({ data });
+    return this.prisma.avaliacao.create({
+      data: {
+        conteudo: data.conteudo,
+        usuario: { connect: { id: data.usuarioID } },
+        professor: { connect: { id: data.professorID } },
+        disciplina: { connect: { id: data.disciplinaID } },
+      },
+      include: {
+        usuario: true,
+        professor: true,
+        disciplina: true,
+        comentarios: true,
+      },
+    });
   }
 
+
+
   async findAll() {
-    return this.prisma.avaliacao.findMany();
+    return this.prisma.avaliacao.findMany({
+      include: {
+        usuario: true,
+        professor: true,
+        disciplina: true,
+        comentarios: true,
+      },
+    });
   }
+
 
   async findOne(id: number) {
     //Verificando se a avaliacao existe
-    const avaliacao = await this.prisma.comentario.findUnique({ where: { id } });
+    const avaliacao = await this.prisma.avaliacao.findUnique({ 
+      where: { id },
+      include: {
+        usuario: true,
+        professor: true,
+        disciplina: true,
+        comentarios: {include: {
+          usuario: true
+        },
+        }
+      },
+    });
     if (!avaliacao) {
       throw new NotFoundException('Avaliação não encontrada.');
     }
@@ -28,7 +62,7 @@ export class AvaliacaoService {
   async update(id: number, data: UpdateAvaliacaoDto) {
 
     //Verificando se a avaliacao existe
-    const avaliacao = await this.prisma.comentario.findUnique({ where: { id } });
+    const avaliacao = await this.prisma.avaliacao.findUnique({ where: { id } });
     if (!avaliacao) {
       throw new NotFoundException('Avaliação não encontrada.');
     }
@@ -42,7 +76,7 @@ export class AvaliacaoService {
   async remove(id: number) {
 
     //Verificando se a avaliacao existe
-    const avaliacao = await this.prisma.comentario.findUnique({ where: { id } });
+    const avaliacao = await this.prisma.avaliacao.findUnique({ where: { id } });
     if (!avaliacao) {
       throw new NotFoundException('Avaliação não encontrada.');
     }
