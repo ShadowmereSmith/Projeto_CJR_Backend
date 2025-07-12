@@ -43,7 +43,7 @@ export class ComentarioController {
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   async remove(@Param('id') id: string, @Req() req) {
-    const userId = req.user.id || req.user.sub; // depende do seu payload
+    const userId = req.user.userId || req.user.sub; // depende do seu payload
     const comentario = await this.comentarioService.findOne(+id);
 
     if (!comentario) throw new ForbiddenException('Comentário não encontrado.');
